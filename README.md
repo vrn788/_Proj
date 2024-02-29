@@ -70,4 +70,4 @@ Contributions to this project are welcome. Please refer to CONTRIBUTING.md for g
 
 ```
 
-Be sure to replace placeholders like `[Your Name]`, `[your.email@example.com]`, and `[GitHub Repository URL]` with your actual information. This README template provides a comprehensive guide to your project, making it accessible for others to understand your research and replicate your analysis.
+
