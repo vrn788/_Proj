@@ -1,0 +1,54 @@
+```
+
+
+###################################### LONG AND WIDE DATA FORMATS ####################################################
+
+# Install relevant package (DO ONCE ONLY)
+# ANSWER NO IF ASKED!!!
+
+install.packages("reshape2", type = "binary")
+install.packages("readxl", type = "binary")
+install.packages("writexl", type = "binary")
+
+### WIDE TO LONG ###
+
+# Load package (DO EACH BOOT)
+
+library(reshape2)
+library(readxl)
+library(writexl)
+
+# Import Excel (Must be in R project root folder)
+
+ppl_WIDE <- read_excel("ppl.xls")
+
+# "Melt" wide format to long format with 3 id columns
+
+ppl_LONG <- melt(Ex1_WIDE, id = c("Country"))
+
+library(dplyr)
+
+# Arrange by country, rename columns
+ppl_LONG <- ppl_LONG %>%
+  plyr::rename(c(variable = "Year", value = "ppl")) %>%
+  arrange(Country)
+
+# "mutate" column "country" by replacing country names in "country.name" format to "iso3c" format
+# Convert names to codes, create new full name column from codes, reorder columns
+
+ppl_CODE <- ppl_LONG %>%
+  mutate(Country = countrycode(Country, "country.name", "iso3c", nomatch = NULL))
+
+ppl_CODE_AND_FULL <- ppl_CODE %>% 
+  #mutate(Country = countrycode(Country, "country.name", "iso3c", nomatch = NULL)) %>% #convert to codes (see above)
+  mutate(CountryName = countrycode(Country, "iso3c", "country.name", nomatch = NULL)) %>% # create new full name column
+  relocate(Country, CountryName) #reorder columns to move country and countryname to col 1 and 2 (optional)
+
+#export excel
+
+write_xlsx(ppl_CODE_AND_FULL, "ppl_CODE_AND_FULL.xlsx")
+
+```
+
+
+
