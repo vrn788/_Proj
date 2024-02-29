@@ -1,0 +1,77 @@
+# Load necessary packages
+library(stringr)
+library(reshape2)
+library(readxl)
+library(writexl)
+library(dplyr)
+library(countrycode)
+library(tidyr)
+
+# Import Excel 
+ind_file <- read_excel("evo_firm_bank.xlsx")  
+
+# Arrange by country
+ind_file <-  arrange(ind_file, Country)
+
+# Separate the 'Country' field into 'Country' and 'City' fields
+ind_file <- ind_file %>%
+  separate(Country, into = c("Country", "City"), sep = "[_ ]", remove = FALSE, extra = "merge")
+
+# Convert the 'Country' field to ISO 3166-1 alpha-3 codes
+ind_file <- ind_file %>%
+  mutate(Country = countrycode(Country, "country.name", "iso3c", nomatch = NULL))
+
+# Combine 'Country' and 'City' fields back into 'Country'
+ind_file <- ind_file %>%
+  unite("Country", Country, City, sep = " ", remove = TRUE, na.rm = TRUE)
+
+ind_CODE_AND_FULL <- ind_file %>% 
+  mutate(CountryName = countrycode(Country, "iso3c", "country.name", nomatch = NULL)) %>% 
+  relocate(Country, CountryName)
+
+# Check if 'Country code' column exists
+if("Country code" %in% colnames(ind_CODE_AND_FULL)){
+  # Define a vector of country codes that should not be changed
+  exclude_codes <- c('IDN', 'ZAR', 'ROM', 'TMP', 'RUS','USA', 'BGD', 'BRA', 'CHN', 'IND', 'MEX', 'NGA', 'PAK')
+  
+  # Update the 'Country' column based on the conditions
+  ind_CODE_AND_FULL <- ind_CODE_AND_FULL %>%
+    mutate(
+      Country = ifelse(Country != `Country code` & nchar(`Country code`) == 3,
+                       ifelse(`Country code` %in% exclude_codes, Country, `Country code`),
+                       Country)
+    ) 
+  
+  #delete the original not iso3 country code
+  ind_CODE_AND_FULL <- dplyr::select(ind_CODE_AND_FULL, -'Country code') 
+} else {
+  print("Column 'Country code' does not exist in the dataframe.")
+}
+
+getwd()
+
+write_xlsx(ind_CODE_AND_FULL, "evo_firm_bank.xlsx")
+
+# Check the structure of the dataframe
+str(ind_CODE_AND_FULL)
+
+# Print out a portion of the dataframe
+head(ind_CODE_AND_FULL)
+
+
+print(head(ind_CODE_AND_FULL))
+
+# Specify a full file path
+output_file_path <- "/Users/varun/Downloads/evo_edu_unemp.xlsx"
+
+
+
+# This will result in a longer data frame with a row for each year per country
+
+
+# Write the dataframe to an Excel file
+write_xlsx(ind_CODE_AND_FULL, output_file_path)
+write_xlsx(data, xlsx_path)
+
+write_xlsx(ind_CODE_AND_FULL, "evo_firm_bank.xlsx")
+
