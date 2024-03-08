@@ -1,0 +1,140 @@
+# Load necessary libraries
+library(tidyverse)
+library(readxl)
+data <- read_excel("litgap.xlsx")
+
+unique(data$CountryCode)
+
+
+
+# Calculate the average literacy gap per country
+avg_litgap <- data %>%
+  group_by(CountryCode) %>%
+  summarize(avg_litgap = mean(litgap, na.rm = TRUE))
+
+# Load the world map
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+# Join the averaged data with the world map data
+map_data <- world %>%
+  left_join(avg_litgap, by = c("iso_a3" = "CountryCode"))
+
+# Check if North American countries are present and have data
+map_data %>% 
+  filter(continent == "North America") %>%
+  select(name, avg_litgap)
+
+# Plot the heatmap
+ggplot(data = map_data) +
+  geom_sf(aes(fill = avg_litgap)) +
+  scale_fill_viridis_c(name = "Avg Lit Gap", na.value = "grey50") + # 'na.value' to handle NA colors
+  labs(title = "Average Literacy Gap by Country (2008 - 2021)", x = NULL, y = NULL) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+
+
+library(rnaturalearth)
+library(ne_countries)
+# Get a list of ISO Alpha-3 country codes
+valid_country_codes <- ne_countries(scale = "medium", returnclass = "sf")$iso_a3
+
+# Filter data to include only rows with valid country codes
+country_data <- data %>%
+  filter(CountryCode %in% valid_country_codes)
+
+# Compute the average litgap for each country from 2008 to 2021
+avg_litgap_data <- country_data %>%
+  group_by(CountryCode) %>%
+  summarize(avg_litgap = mean(litgap, na.rm = TRUE))
+
+# Load the world map
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+# Merge the world map with the averaged litgap data
+world_data <- world %>%
+  left_join(avg_litgap_data, by = c("iso_a3" = "CountryCode"))
+
+# Plot the heatmap
+ggplot(world_data) +
+  geom_sf(aes(fill = avg_litgap)) +
+  scale_fill_viridis_c(name = "Average Literacy Gap", na.value = "grey50", limits = c(min(avg_litgap_data$avg_litgap, na.rm = TRUE), max(avg_litgap_data$avg_litgap, na.rm = TRUE))) +
+  labs(title = "Average Literacy Gap by Country (2008 - 2021)", x = "", y = "") +
+  theme_minimal()
+
+
+
+# Install packages if they are not already installed
+install.packages(c("ggplot2", "rnaturalearth", "rnaturalearthdata", "viridis"))
+library(ggplot2)
+library(rnaturalearth)
+library(viridis)
+
+# Get world map data
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+
+lit_gap_data <- read_excel("litgap.xlsx")
+
+north_america_litgap <- mean(c(
+  lit_gap_data[lit_gap_data$CountryCode == "NAC", "litgap"], 
+  lit_gap_data[lit_gap_data$CountryCode == "CAN", "litgap"]
+), na.rm = TRUE)
+
+# Update North America's literacy gap in your data frame
+lit_gap_data[lit_gap_data$CountryCode == "NAC", "litgap"] <- north_america_litgap
+
+# Now, merge this updated data with the world map data
+world_data <- merge(world, lit_gap_data, by.x = "iso_a3", by.y = "CountryCode", all.x = TRUE)
+
+# Create the map
+ggplot(data = world_data) +
+  geom_sf(aes(fill = litgap), color = "white") + # Fill countries with the literacy gap value
+  scale_fill_viridis_c(option = "plasma", na.value = NA) + # Use a continuous color scale, handle NA values
+  labs(title = "Literacy Gap Heatmap (2008-2021)", fill = "Literacy Gap") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+
+
+# Install packages if they are not already installed
+install.packages(c("ggplot2", "rnaturalearth", "rnaturalearthdata", "dplyr", "viridis"))
+library(ggplot2)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(dplyr)
+library(viridis)
+
+# Get world map data
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+
+
+# Merge world data with literacy gap data
+world_data <- merge(world, lit_gap_data, by.x = "iso_a3", by.y = "CountryCode", all.x = TRUE)
+
+afro_eurasia <- world_data %>% 
+  filter(!(continent %in% c("North America", "South America", "Oceania", "Antarctica")))
+
+# Create the map focused on Afro-Eurasia
+ggplot(data = afro_eurasia) +
+  geom_sf(aes(fill = litgap), color = "white") + # Fill countries with the literacy gap value
+  scale_fill_viridis_c(option = "plasma", na.value = NA) + # Use a continuous color scale, handle NA values
+  labs(title = "Literacy Gap Heatmap (2008-2021)", fill = "Literacy Gap") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+ggplot(data = afro_eurasia) +
+  geom_sf(aes(fill = litgap), color = "white") + # Fill countries with the literacy gap value
+  scale_fill_viridis_c(option = "plasma", na.value = NA) + # Use a continuous color scale, handle NA values
+  labs(title = "Literacy % Heatmap Afro-Eurasia (2008-2021)", fill = "Literacy Gap") +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(hjust = 0.5) # Center the title
+  )
+
+
+
