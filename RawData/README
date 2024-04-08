@@ -1,1 +1,51 @@
+# README: Analyzing World Bank Data with R
+
+ Overview
+This README explains how to analyze World Bank data using R. The process includes steps for data cleaning, transformation, summarization, correlation and regression analysis, and data visualization, focusing on internet usage, GDP, income, and education expenditure metrics.
+
+ Prerequisites
+- Ensure R and RStudio are installed on your computer.
+- Have a basic understanding of R programming and data analysis concepts.
+- Install the required R libraries: `readxl`, `dplyr`, `ggplot2`, `tidyr`, `plotly`, `readr`, `RColorBrewer`, `ggridges`, and `GGally`.
+
+ Data Acquisition
+1. Go to the World Bank Open Data website: [World Bank Open Data](https://data.worldbank.org/).
+2. Search for and download the desired datasets, such as "Internet usage", "GDP", "Income", and "Education expenditure", in Excel or CSV format.
+
+ Files Required
+- `internetuse.xls`: Internet usage data by country over time.
+- `gdp.csv`: GDP data by country over time.
+- `income.csv`: Income data by country over time.
+- `educationspend.csv`: Education expenditure data by country over time.
+- `litgap.csv`: Literacy rate data by gender and country.
+
+ Usage Instructions
+
+# 1. Load Libraries
+Run the script section that imports all the necessary R packages.
+
+# 2. Load and Clean Data
+- Use `read_excel` or `read_csv` to import the data files.
+- Clean and transform the data to a long format with `pivot_longer`, ensuring year columns are numeric for time series analysis.
+
+# 3. Summary Statistics and Data Exploration
+- Calculate summary statistics like mean, standard deviation, and Compound Annual Growth Rate (CAGR).
+- Visualize initial data trends using `ggplot2`.
+
+# 4. Correlation and Regression Analysis
+- Merge datasets on common columns (`CountryName` and `Year`) for relationship analysis.
+- Calculate correlation matrices with `cor` to identify variable relationships.
+- Conduct linear regression with `lm` to explore factors influencing GDP.
+
+# 5. Advanced Visualization
+- Create interactive plots using `plotly` for dynamic data exploration.
+- Employ `ggplot2` and `ggridges` for ridge plots, analyzing data distribution.
+
+# 6. Comparative Analysis
+- Filter data for specific countries or criteria to perform comparative analysis.
+- Compare trends across different countries using bar charts and line plots.
+
+# 7. Multi-Dimensional Analysis
+- Use `plotly` for 3D scatter plots to investigate complex relationships among multiple variables.
+
 
