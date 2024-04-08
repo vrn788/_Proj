@@ -17,7 +17,6 @@ library(GGally)
 internet_usage <- read_excel("internetuse.xls")
 head(internet_usage)
 
-# Clean the data - assuming the first three columns are country info and the rest are years
 internet_usage_long <- internet_usage %>%
   pivot_longer(cols = -c(CountryName, CountryCode, IndicatorName), names_to = "Year", values_to = "Internet_Usage") %>%
   mutate(Year = as.numeric(Year)) # Convert Year to numeric if it's not already
@@ -151,7 +150,6 @@ plot_ly(combined_data, x = ~Income, y = ~Internet_Usage, z = ~GDP,
 # Define the countries of interest
 countries_of_interest <- c("Guyana", "Ethiopia", "France", "China", "India", "United Kingdom")
 
-# Assuming you've already merged the datasets into combined_data as before
 combined_data <- combined_data %>%
   filter(CountryName %in% countries_of_interest)
 
@@ -229,8 +227,6 @@ ggplot(data = gdp_data_long, aes(x = Year, y = GDP, color = CountryName)) +
        color = "Country") +
   theme(legend.position = "none") # Hide the legend to avoid clutter
 
-
-# Assuming your GDP data is already loaded and in long format
 gdp_data_long <- read_csv("gdp.csv") %>%
   pivot_longer(cols = -c(CountryName, CountryCode), names_to = "Year", values_to = "GDP") %>%
   mutate(Year = as.numeric(Year), GDP = as.numeric(GDP))
@@ -472,8 +468,7 @@ education_long <- education_data %>%
   # Convert the 'Year' column to numeric
   mutate(Year = as.numeric(Year))
 
-# Merge education data with the combined_data
-# Assuming combined_data is your previously merged data with 'CountryName' and 'Year'
+
 full_data <- combined_data %>%
   inner_join(education_long, by = c("CountryName", "Year"))
 
@@ -518,13 +513,8 @@ print(pairs_plot)
 print(education_bar_plot)
 
 
-
-# Assuming the literacy rate data is saved as literacy_rate.csv
-# Replace 'path_to_your_literacy_data.csv' with the actual path to the literacy rate CSV file
 literacy_data <- read_csv("litgap.csv")
 
-# Merge the literacy rate data with the combined dataset
-# Make sure that the 'Year' column in both datasets is of the same data type (numeric)
 full_data <- full_data %>%
   inner_join(literacy_data, by = c("CountryName" = "Country Name", "Year"))
 
@@ -534,8 +524,7 @@ correlation_matrix <- full_data %>%
   select(GDP, Income, Internet_Usage, EducationExpenditure, female, male) %>%
   cor(use = "complete.obs")
 
-# You might also want to look at gender differences in literacy rates
-# For example, calculate the gender gap in literacy rates
+
 full_data <- full_data %>%
   mutate(LiteracyRateGap = male - female)
 
