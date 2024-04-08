@@ -134,7 +134,9 @@ ggplot(data = afro_eurasia) +
   theme(
     legend.position = "bottom",
     plot.title = element_text(hjust = 0.5) # Center the title
-  )
+
+)
+
 
 
 
