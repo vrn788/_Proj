@@ -45,29 +45,14 @@ The analysis leverages publicly available data from the World Bank, focusing on 
 
 - **Source**: [World Bank Open Data](https://data.worldbank.org/)
 
-## Repository Structure
-- `raw_data/`: Directory for storing the raw data files.
-- `processed_data/`: Contains cleaned and transformed data ready for analysis.
-- `scripts/`:
-  - `01_data_download.R`: Downloads datasets from the World Bank.
-  - `02_data_cleaning.R`: Cleans the raw data.
-  - `03_data_transformation.R`: Transforms the cleaned data for analysis.
-  - `04_exploratory_data_analysis.Rmd`: Conducts exploratory data analysis.
-  - `05_statistical_analysis.R`: Performs statistical testing and modeling.
-- `outputs/figures/`: Stores generated plots and graphs.
-- `outputs/models/`: Saves serialized models.
 
 ## Running the Analysis
 To replicate the analysis:
-1. Run `01_data_download.R` to fetch the raw data.
-2. Execute `02_data_cleaning.R` followed by `03_data_transformation.R` for data preprocessing.
-3. Open and run `04_exploratory_data_analysis.Rmd` and `05_statistical_analysis.R` for the main analysis.
-
+1. Run `InternetTrend.R` Which contains all the steps within the file itself for the main analysis.
 ## Contributing
-Contributions to this project are welcome. Please refer to CONTRIBUTING.md for guidelines.
 
-## License
 
-```
+
+
 
 
