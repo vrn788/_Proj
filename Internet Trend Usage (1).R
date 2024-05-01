@@ -46,7 +46,7 @@ ggplot(data = internet_usage_long %>% filter(CountryName == "India"),
   theme_minimal() +
   labs(title = "Internet Usage Worldwide", x = "Year", y = "Internet Usage (%)")
 
-
+countries_of_interest <- c("Guyana", "Ethiopia", "France","China","India","United Kingdom") 
 # Filter the data for the countries of interest
 filtered_data <- internet_usage_long %>% 
   filter(CountryName %in% countries_of_interest)
@@ -73,7 +73,7 @@ mean_value <- mean(Guyana_data$Internet_Usage[Guyana_data$year == 2018], na.rm =
 
 
 
-countries_of_interest <- c("Guyana", "Ethiopia", "France","China","India","United Kingdom") 
+
 
 
 print(internet_usage)
